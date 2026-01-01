@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -82,12 +84,48 @@ export default function RoofingForm() {
         }),
       });
 
-      confetti({
-        particleCount: 150,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ["#dc2626", "#ffffff", "#1e293b"],
-      });
+      //  START OF  CELEBRATION animation
+      const duration = 3 * 1000; // How long the sparkles keep firing (3 seconds)
+      const animationEnd = Date.now() + duration;
+
+      // Default settings for each individual burst
+      const defaults = {
+        startVelocity: 30, // Initial speed (higher = faster explosion)
+        spread: 360, // 360 means it shoots in all directions
+        ticks: 150, // How many frames the sparkles stay on screen (higher = longer life)
+        zIndex: 0,
+      };
+
+      const randomInRange = (min: number, max: number) =>
+        Math.random() * (max - min) + min;
+
+      // This creates a loop that fires multiple bursts
+      const interval: any = setInterval(function () {
+        const timeLeft = animationEnd - Date.now();
+
+        // Stop the loop when the 3 seconds are up
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        // We fire two bursts at once: one from the left, one from the right
+        // Left Side burst
+        confetti({
+          ...defaults,
+          particleCount: 80, // Number of sparkles per burst
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, // Position (0.1 is far left)
+          colors: ["#dc2626", "#ffffff", "#1e293b"], // Brand Red, White, and Dark Blue
+        });
+
+        // Right Side burst
+        confetti({
+          ...defaults,
+          particleCount: 80,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, // Position (0.9 is far right)
+          colors: ["#dc2626", "#ffffff", "#1e293b"],
+        });
+      }, 250); // This fires a new burst every 250 milliseconds
+      // --- END OF CELEBRATION ---
 
       setSubmitted(true);
     } catch (err) {
