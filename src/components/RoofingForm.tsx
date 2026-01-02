@@ -12,7 +12,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import confetti from "canvas-confetti";
-import { FORM_CONFIG, FormStep } from "../config/questions";
+import { FORM_CONFIG, FormStep } from "../data/questions";
 
 type FormAnswers = Record<string, string | number | boolean>;
 
