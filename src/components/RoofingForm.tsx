@@ -27,28 +27,40 @@ export default function RoofingForm() {
   const currentStep: FormStep = FORM_CONFIG.steps[stepIndex];
   const progress = ((stepIndex + 1) / FORM_CONFIG.steps.length) * 100;
 
-  // Validation Logic
   const validateStep = () => {
+    // If it's a button-click step, it's always valid
     if (currentStep.type === "choice") return true;
 
-    // Check if all fields in the current step have a value
     const fields = currentStep.fields || [];
+
     for (const field of fields) {
       const val = formData[field.id];
-      if (!val || String(val).trim().length < 2) {
-        setError(`Please enter your ${field.placeholder.toLowerCase()}`);
+      const stringVal = String(val || "").trim();
+
+      // 1. Basic Empty Check for all fields
+      if (stringVal.length < 2) {
+        // Customizing the error message for better UX
+        const fieldName = field.placeholder.split("(")[0].toLowerCase(); // Cleans "Full Address (Street...)" to just "full address"
+        setError(`Please enter your ${fieldName}`);
         return false;
       }
 
-      // Basic Phone Validation
-      if (
-        currentStep.type === "phone" &&
-        !/^\+?[0-9\s-]{8,}$/.test(String(val))
-      ) {
-        setError("Please enter a valid phone number");
-        return false;
+      // 2. Specific UK Phone Validation
+      if (field.id === "phone") {
+        const ukPhoneRegex =
+          /^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?44\)?)|(?:\+?44))[\s-]?(?:\(?0\)?[\s-]?)?|(?:\(?0))(?:(?:\d{5}\)?[\s-]?\d{4,5})|(?:\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3}))|(?:\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4})|(?:\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}))(?:[\s-]?(?:x|ext\.?|#)\d{3,4})?$/;
+
+        // Strip spaces and dashes before testing the regex
+        const strippedPhone = stringVal.replace(/[\s-]/g, "");
+
+        if (!ukPhoneRegex.test(strippedPhone)) {
+          setError("Please enter a valid UK phone number");
+          return false;
+        }
       }
     }
+
+    // If we got here, all fields passed
     setError(null);
     return true;
   };

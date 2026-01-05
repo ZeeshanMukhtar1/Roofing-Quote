@@ -91,19 +91,15 @@ export const FORM_CONFIG: FormConfig = {
       ],
     },
     {
-      id: "personalInfo",
-      question: "What's your name?",
+      id: "finalDetails",
+      question: "Final Step: Where should we send your quote?",
       type: "text",
       fields: [
         { id: "firstName", placeholder: "First name" },
         { id: "lastName", placeholder: "Last name" },
+        { id: "address", placeholder: "Full Address (Street, Town, Postcode)" },
+        { id: "phone", placeholder: "UK Phone Number (e.g. 07123 456789)" },
       ],
-    },
-    {
-      id: "phoneInfo",
-      question: "What phone number should we contact you on?",
-      type: "phone",
-      fields: [{ id: "phone", placeholder: "+44 0000 000000" }],
     },
   ],
 };
